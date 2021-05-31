@@ -39,6 +39,7 @@ function test_input($data)
       <li><a href="afiseaza_elevi.php">Afișează toți elevii</a></li>
       <li><a href="cauta_elev.php">Caută un elev</a></li>
       <li><a href="adauga_elev.php">Adaugă elev</a></li>
+      <li><a href="modifica_elev.php">Modifică note elev</a></li>
       <li><a href="sterge_elev.php">Șterge elev</a></li>
     </ul>
   </div>

@@ -1,9 +1,25 @@
 <?php
 include 'connection.php';
 
-$name="";
+$nume="";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $name = test_input($_POST["ID_Elev"]);
+  $nume = test_input($_POST["nume_Elev"]);
+}
+$prenume="";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $prenume = test_input($_POST["prenume_Elev"]);
+}
+$informatica="";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $informatica = test_input($_POST["nota_informatica"]);
+}
+$matematica="";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $matematica = test_input($_POST["nota_matematica"]);
+}
+$romana="";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $romana = test_input($_POST["nota_romana"]);
 }
 function test_input($data)
 {
@@ -28,7 +44,7 @@ function test_input($data)
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
   <div class="navbar-header">
-      <a class="navbar-brand" href="#">Caută un elev</a>
+      <a class="navbar-brand" href="#">Modifică note elev</a>
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="index.php">Acasă</a></li>
@@ -44,21 +60,39 @@ function test_input($data)
 <div class="container">
     <div class="mx-auto">
       <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-                <input type="form-control mr-sm-2" name="ID_Elev" placeholder="Nume elev">
-                <input type="submit" name="submit" value="Cauta elev">
+                <input type="form-control mr-sm-2" name="nume_Elev"  placeholder="Nume Elev"><br>
+                <input type="form-control mr-sm-2" name="prenume_Elev"  placeholder="Prenume Elev"><br>
+                <input type="form-control mr-sm-2" name="nota_informatica"  placeholder="Informatica"><br>
+                <input type="form-control mr-sm-2" name="nota_matematica"  placeholder="Matematica"><br>
+                <input type="form-control mr-sm-2" name="nota_romana"  placeholder="Romana"><br>
+                <input type="submit" name="submit" value="Modifică note elev">
       </form>
     </div>
     <div class="row">
 
       <div class="col-sm-20">
         <?php
-
+        if($informatica!="")
+        {
+            $sql="UPDATE elevi SET Informatica='$informatica' WHERE id_elev=(SELECT id_elev FROM elevi WHERE Nume ='$nume' AND Prenume='$prenume') ";
+            $result = $conn->query($sql);
+        }
+        if($matematica!="")
+        {
+            $sql="UPDATE elevi SET Matematica='$matematica' WHERE id_elev=(SELECT id_elev FROM elevi WHERE Nume ='$nume' AND Prenume='$prenume') ";
+            $result = $conn->query($sql);
+        }
+        if($romana!="")
+        {
+            $sql="UPDATE elevi SET Romana='$romana' WHERE id_elev=(SELECT id_elev FROM elevi WHERE Nume ='$nume' AND Prenume='$prenume') ";
+            $result = $conn->query($sql);
+        }
         $sql="SELECT elevi.Nume, elevi.Prenume, elevi.Clasa, elevi.Email, elevi.Telefon, elevi.Informatica, elevi.Matematica, elevi.Romana
         FROM elevi
-        WHERE elevi.nume='$name'";
+        WHERE nume='$nume' AND prenume='$prenume'";
         $result = $conn->query($sql);
 
-        //echo $name;
+        //echo $nume;
         if ($result->num_rows > 0) 
         {
           // output data of each row
@@ -73,9 +107,9 @@ function test_input($data)
                       echo "$row[Nume]"." "."$row[Prenume]";
                       echo '</b></h4>';
                       echo '<br>';
-                      echo "<b>MATE</b> <br>Test "."$row[Matematica] <br>";
-                      echo "<b>Informatica</b>"."$row[Informatica]<br> ";
-                      echo "<b>Romana</b>"."$row[Romana]<br> ";
+                      echo "<b>MATE</b> "."$row[Matematica] <br>";
+                      echo "<b>Informatica </b>"."$row[Informatica]<br> ";
+                      echo "<b>Romana </b>"."$row[Romana]<br> ";
                       echo ' <p class="card-text">Contact:</p><p>';
                       echo "$row[Email]";
                       echo '</p><p>';
@@ -88,9 +122,6 @@ function test_input($data)
             }  
           echo '</div>';
         } 
-        else{
-          echo "<br>    Introdu numele elevului";
-        }
         ?>
       </div>
     </div>
